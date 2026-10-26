@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "pack_version": "0.1",
+  "prepared_date": "2026-10-26",
+  "status": "synthetic development fixtures; no model inference performed",
+  "counts": {
+    "claim_pairs": 24,
+    "retrieval_memories": 10,
+    "retrieval_queries": 8
+  },
+  "validation": [
+    "JSONL schema and unique IDs checked",
+    "All referenced memory IDs exist",
+    "Gold temporal orders agree with normalized times",
+    "Relevant IDs and hard negatives are disjoint",
+    "Perfect-label, missing-output and majority-baseline scorer self-tests passed",
+    "Duplicate IDs, unknown IDs and invalid probabilities are rejected",
+    "Retrieval relevance and chronology scorer self-tests passed"
+  ],
+  "sha256": {
+    "README.md": "b76cb96223478c4189700a80e81c49978e6526fb4d160b4ea3755c9a9d48258b",
+    "pairs.jsonl": "919cc97e6833d562e3af9c9aa8c9b1cc07b65b8b5f9965313550fd0d11a9ba7e",
+    "retrieval_memories.jsonl": "03a4e493ee730ed9d59e2126cc60b713db99f7e889f921e162d62469f41125f6",
+    "retrieval_queries.jsonl": "dc240ad36bdd6af84a35c4a9cf4a48722ecebf8d970a0bcefa9149ef5aecce5a",
+    "score.py": "449e6d5bb415d448da7f75a20c140c951337b7a2688dde2fc7539fb529ff71d1"
+  }
+}

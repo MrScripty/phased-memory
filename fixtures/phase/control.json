@@ -1,0 +1,344 @@
+{
+  "schema_version": 1,
+  "data_kind": "authored_development",
+  "candidate_count": 10,
+  "corpus": [
+    {
+      "id": "phase-memory-01",
+      "semantics": {
+        "subject": "alice",
+        "predicate": "trusts",
+        "object": "bob",
+        "polarity": "affirmed",
+        "perspective": {
+          "modality": "fact",
+          "holder": "narrator"
+        },
+        "continuity": "main",
+        "entities": [
+          "alice",
+          "bob"
+        ],
+        "qualifiers": [],
+        "state_key": null,
+        "story_time": {
+          "timeline": "fictional-minute",
+          "position": 540
+        }
+      }
+    },
+    {
+      "id": "phase-memory-02",
+      "semantics": {
+        "subject": "alice",
+        "predicate": "trusts",
+        "object": "bob",
+        "polarity": "negated",
+        "perspective": {
+          "modality": "fact",
+          "holder": "narrator"
+        },
+        "continuity": "main",
+        "entities": [
+          "alice",
+          "bob"
+        ],
+        "qualifiers": [],
+        "state_key": null,
+        "story_time": {
+          "timeline": "fictional-minute",
+          "position": 1980
+        }
+      }
+    },
+    {
+      "id": "phase-memory-03",
+      "semantics": {
+        "subject": "bob",
+        "predicate": "trusts",
+        "object": "alice",
+        "polarity": "affirmed",
+        "perspective": {
+          "modality": "fact",
+          "holder": "narrator"
+        },
+        "continuity": "main",
+        "entities": [
+          "alice",
+          "bob"
+        ],
+        "qualifiers": [],
+        "state_key": null,
+        "story_time": {
+          "timeline": "fictional-minute",
+          "position": 1980
+        }
+      }
+    },
+    {
+      "id": "phase-memory-04",
+      "semantics": {
+        "subject": "charlie",
+        "predicate": "trusts",
+        "object": "bob",
+        "polarity": "affirmed",
+        "perspective": {
+          "modality": "fact",
+          "holder": "narrator"
+        },
+        "continuity": "main",
+        "entities": [
+          "charlie",
+          "bob"
+        ],
+        "qualifiers": [],
+        "state_key": null,
+        "story_time": {
+          "timeline": "fictional-minute",
+          "position": 1980
+        }
+      }
+    },
+    {
+      "id": "phase-memory-05",
+      "semantics": {
+        "subject": "bob",
+        "predicate": "trusts",
+        "object": "alice",
+        "polarity": "affirmed",
+        "perspective": {
+          "modality": "belief",
+          "holder": "alice"
+        },
+        "continuity": "main",
+        "entities": [
+          "alice",
+          "bob"
+        ],
+        "qualifiers": [],
+        "state_key": null,
+        "story_time": {
+          "timeline": "fictional-minute",
+          "position": 1980
+        }
+      }
+    },
+    {
+      "id": "phase-memory-06",
+      "semantics": {
+        "subject": "alice",
+        "predicate": "trusts",
+        "object": "bob",
+        "polarity": "unknown",
+        "perspective": {
+          "modality": "fact",
+          "holder": "narrator"
+        },
+        "continuity": "main",
+        "entities": [
+          "alice",
+          "bob"
+        ],
+        "qualifiers": [],
+        "state_key": null,
+        "story_time": null
+      }
+    },
+    {
+      "id": "phase-memory-07",
+      "semantics": {
+        "subject": "alice",
+        "predicate": "trusts",
+        "object": "bob",
+        "polarity": "affirmed",
+        "perspective": {
+          "modality": "fact",
+          "holder": "narrator"
+        },
+        "continuity": "alternate",
+        "entities": [
+          "alice",
+          "bob"
+        ],
+        "qualifiers": [],
+        "state_key": null,
+        "story_time": {
+          "timeline": "fictional-minute",
+          "position": 1980
+        }
+      }
+    },
+    {
+      "id": "phase-memory-08",
+      "semantics": {
+        "subject": "bob",
+        "predicate": "plans",
+        "object": {
+          "action": "ask_for_help",
+          "target_time": {
+            "timeline": "fictional-minute",
+            "position": 2100
+          }
+        },
+        "polarity": "affirmed",
+        "perspective": {
+          "modality": "intention",
+          "holder": "bob"
+        },
+        "continuity": "main",
+        "entities": [
+          "alice",
+          "bob"
+        ],
+        "qualifiers": [
+          "intention"
+        ],
+        "state_key": null,
+        "story_time": {
+          "timeline": "fictional-minute",
+          "position": 1920
+        }
+      }
+    },
+    {
+      "id": "phase-memory-09",
+      "semantics": {
+        "subject": "north_gate",
+        "predicate": "state",
+        "object": "open",
+        "polarity": "affirmed",
+        "perspective": {
+          "modality": "fact",
+          "holder": "narrator"
+        },
+        "continuity": "main",
+        "entities": [
+          "north_gate"
+        ],
+        "qualifiers": [],
+        "state_key": "gate-state",
+        "story_time": {
+          "timeline": "fictional-minute",
+          "position": 500
+        }
+      }
+    },
+    {
+      "id": "phase-memory-10",
+      "semantics": {
+        "subject": null,
+        "predicate": "location",
+        "object": {
+          "nested": {
+            "z": true,
+            "a": 2
+          }
+        },
+        "polarity": "affirmed",
+        "perspective": "unknown",
+        "continuity": null,
+        "entities": [],
+        "qualifiers": [
+          "unresolved"
+        ],
+        "state_key": null,
+        "story_time": null
+      }
+    }
+  ],
+  "queries": [
+    {
+      "id": "phase-query-01",
+      "semantics": {
+        "subject": "alice",
+        "predicate": "trusts",
+        "object": "bob",
+        "polarity": "affirmed",
+        "perspective": {
+          "modality": "fact",
+          "holder": "narrator"
+        },
+        "continuity": "main",
+        "entities": [
+          "alice",
+          "bob"
+        ],
+        "qualifiers": [],
+        "state_key": null,
+        "story_time": {
+          "timeline": "fictional-minute",
+          "position": 1980
+        }
+      }
+    },
+    {
+      "id": "phase-query-02",
+      "semantics": {
+        "subject": "alice",
+        "predicate": "trusts",
+        "object": "bob",
+        "polarity": "negated",
+        "perspective": {
+          "modality": "fact",
+          "holder": "narrator"
+        },
+        "continuity": "main",
+        "entities": [
+          "alice",
+          "bob"
+        ],
+        "qualifiers": [],
+        "state_key": null,
+        "story_time": {
+          "timeline": "fictional-minute",
+          "position": 1980
+        }
+      }
+    },
+    {
+      "id": "phase-query-03",
+      "semantics": {
+        "subject": "bob",
+        "predicate": "trusts",
+        "object": "alice",
+        "polarity": "affirmed",
+        "perspective": {
+          "modality": "fact",
+          "holder": "narrator"
+        },
+        "continuity": "main",
+        "entities": [
+          "alice",
+          "bob"
+        ],
+        "qualifiers": [],
+        "state_key": null,
+        "story_time": {
+          "timeline": "fictional-minute",
+          "position": 1980
+        }
+      }
+    },
+    {
+      "id": "phase-query-04",
+      "semantics": {
+        "subject": "alice",
+        "predicate": "trusts",
+        "object": "bob",
+        "polarity": "unknown",
+        "perspective": {
+          "modality": "fact",
+          "holder": "narrator"
+        },
+        "continuity": "main",
+        "entities": [
+          "alice",
+          "bob"
+        ],
+        "qualifiers": [],
+        "state_key": null,
+        "story_time": null
+      }
+    }
+  ]
+}
