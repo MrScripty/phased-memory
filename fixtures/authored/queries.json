@@ -1,0 +1,184 @@
+[
+  {
+    "id": "latest",
+    "query_text": "Latest world evidence about Alice trusting Bob",
+    "filters": {
+      "subject": "Alice",
+      "predicate": "trusts",
+      "object": "Bob",
+      "perspective": "world",
+      "continuity": "main",
+      "timeline": "story",
+      "latest": true
+    },
+    "expected_ids": [
+      "m02",
+      "m09"
+    ],
+    "misleading_ids": [
+      "m03",
+      "m06",
+      "m07",
+      "m08"
+    ],
+    "chronology": []
+  },
+  {
+    "id": "historical",
+    "query_text": "Alice's trust in Bob at story position one",
+    "filters": {
+      "subject": "Alice",
+      "predicate": "trusts",
+      "object": "Bob",
+      "perspective": "world",
+      "continuity": "main",
+      "timeline": "story",
+      "at_or_before": 1,
+      "latest": true
+    },
+    "expected_ids": [
+      "m01"
+    ],
+    "misleading_ids": [
+      "m02",
+      "m09",
+      "m06"
+    ],
+    "chronology": []
+  },
+  {
+    "id": "history",
+    "query_text": "History of Alice's trust in Bob",
+    "filters": {
+      "subject": "Alice",
+      "predicate": "trusts",
+      "object": "Bob",
+      "perspective": "world",
+      "continuity": "main",
+      "timeline": "story",
+      "chronological": true
+    },
+    "expected_ids": [
+      "m03",
+      "m01",
+      "m02",
+      "m09"
+    ],
+    "misleading_ids": [
+      "m04",
+      "m05",
+      "m06",
+      "m07",
+      "m08"
+    ],
+    "chronology": [
+      "m03",
+      "m01",
+      "m02",
+      "m09"
+    ]
+  },
+  {
+    "id": "contradictory",
+    "query_text": "Same-time contradictory world evidence at position two",
+    "filters": {
+      "subject": "Alice",
+      "predicate": "trusts",
+      "object": "Bob",
+      "perspective": "world",
+      "continuity": "main",
+      "timeline": "story",
+      "at_or_before": 2,
+      "latest": true
+    },
+    "expected_ids": [
+      "m02",
+      "m09"
+    ],
+    "misleading_ids": [
+      "m03",
+      "m07",
+      "m08"
+    ],
+    "chronology": []
+  },
+  {
+    "id": "direction",
+    "query_text": "Bob trusts Alice",
+    "filters": {
+      "subject": "Bob",
+      "predicate": "trusts",
+      "object": "Alice",
+      "perspective": "world",
+      "continuity": "main"
+    },
+    "expected_ids": [
+      "m04"
+    ],
+    "misleading_ids": [
+      "m01",
+      "m02",
+      "m09"
+    ],
+    "chronology": []
+  },
+  {
+    "id": "character",
+    "query_text": "Charlie trusts Bob",
+    "filters": {
+      "subject": "Charlie",
+      "predicate": "trusts",
+      "object": "Bob",
+      "continuity": "main"
+    },
+    "expected_ids": [
+      "m05"
+    ],
+    "misleading_ids": [
+      "m01",
+      "m02"
+    ],
+    "chronology": []
+  },
+  {
+    "id": "belief",
+    "query_text": "Alice's belief about trusting Bob",
+    "filters": {
+      "subject": "Alice",
+      "predicate": "trusts",
+      "object": "Bob",
+      "perspective": "Alice:belief",
+      "continuity": "main",
+      "timeline": "story"
+    },
+    "expected_ids": [
+      "m07"
+    ],
+    "misleading_ids": [
+      "m02",
+      "m09",
+      "m08"
+    ],
+    "chronology": []
+  },
+  {
+    "id": "alternate",
+    "query_text": "Alice trusts Bob in the alternate draft",
+    "filters": {
+      "subject": "Alice",
+      "predicate": "trusts",
+      "object": "Bob",
+      "perspective": "world",
+      "continuity": "alternate",
+      "timeline": "story"
+    },
+    "expected_ids": [
+      "m06"
+    ],
+    "misleading_ids": [
+      "m02",
+      "m09"
+    ],
+    "chronology": []
+  }
+]

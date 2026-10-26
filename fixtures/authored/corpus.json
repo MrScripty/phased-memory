@@ -1,0 +1,383 @@
+{
+  "raw_text": "Ten new authored smoke memories. See each claim's source and qualifiers.",
+  "claims": [
+    {
+      "id": "m01",
+      "normalized": "Alice trusts Bob (affirmed)",
+      "triple": {
+        "subject": "Alice",
+        "predicate": "trusts",
+        "object": "Bob",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "Alice",
+        "Bob"
+      ],
+      "source": "Authored source: Alice trusts Bob (affirmed).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 1
+      },
+      "qualifiers": []
+    },
+    {
+      "id": "m02",
+      "normalized": "Alice trusts Bob (negated)",
+      "triple": {
+        "subject": "Alice",
+        "predicate": "trusts",
+        "object": "Bob",
+        "polarity": "negated"
+      },
+      "entities": [
+        "Alice",
+        "Bob"
+      ],
+      "source": "Authored source: Alice trusts Bob (negated).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 2
+      },
+      "qualifiers": []
+    },
+    {
+      "id": "m03",
+      "normalized": "Alice trusts Bob (affirmed)",
+      "triple": {
+        "subject": "Alice",
+        "predicate": "trusts",
+        "object": "Bob",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "Alice",
+        "Bob"
+      ],
+      "source": "Authored source: Alice trusts Bob (affirmed).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 0
+      },
+      "qualifiers": []
+    },
+    {
+      "id": "m04",
+      "normalized": "Bob trusts Alice (affirmed)",
+      "triple": {
+        "subject": "Bob",
+        "predicate": "trusts",
+        "object": "Alice",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "Bob",
+        "Alice"
+      ],
+      "source": "Authored source: Bob trusts Alice (affirmed).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 2
+      },
+      "qualifiers": []
+    },
+    {
+      "id": "m05",
+      "normalized": "Charlie trusts Bob (affirmed)",
+      "triple": {
+        "subject": "Charlie",
+        "predicate": "trusts",
+        "object": "Bob",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "Charlie",
+        "Bob"
+      ],
+      "source": "Authored source: Charlie trusts Bob (affirmed).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 2
+      },
+      "qualifiers": []
+    },
+    {
+      "id": "m06",
+      "normalized": "Alice trusts Bob (affirmed)",
+      "triple": {
+        "subject": "Alice",
+        "predicate": "trusts",
+        "object": "Bob",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "Alice",
+        "Bob"
+      ],
+      "source": "Authored source: Alice trusts Bob (affirmed).",
+      "perspective": "world",
+      "continuity": "alternate",
+      "story_time": {
+        "timeline": "story",
+        "position": 2
+      },
+      "qualifiers": []
+    },
+    {
+      "id": "m07",
+      "normalized": "Alice trusts Bob (affirmed)",
+      "triple": {
+        "subject": "Alice",
+        "predicate": "trusts",
+        "object": "Bob",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "Alice",
+        "Bob"
+      ],
+      "source": "Authored source: Alice trusts Bob (affirmed).",
+      "perspective": "Alice:belief",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 2
+      },
+      "qualifiers": []
+    },
+    {
+      "id": "m08",
+      "normalized": "Alice trusts Bob (affirmed)",
+      "triple": {
+        "subject": "Alice",
+        "predicate": "trusts",
+        "object": "Bob",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "Alice",
+        "Bob"
+      ],
+      "source": "Authored source: Alice trusts Bob (affirmed).",
+      "perspective": "Bob:speech",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 2
+      },
+      "qualifiers": [
+        "lie"
+      ]
+    },
+    {
+      "id": "m09",
+      "normalized": "Alice trusts Bob (affirmed)",
+      "triple": {
+        "subject": "Alice",
+        "predicate": "trusts",
+        "object": "Bob",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "Alice",
+        "Bob"
+      ],
+      "source": "Authored source: Alice trusts Bob (affirmed).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 2
+      },
+      "qualifiers": []
+    },
+    {
+      "id": "m10",
+      "normalized": "key located drawer (affirmed)",
+      "triple": {
+        "subject": "key",
+        "predicate": "located",
+        "object": "drawer",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "key",
+        "drawer"
+      ],
+      "source": "Authored source: key located drawer (affirmed).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 2
+      },
+      "qualifiers": []
+    }
+  ],
+  "provenance": {
+    "kind": "human",
+    "note": "Authored development fixtures distinct from the original starter pack; labels need independent review."
+  },
+  "embeddings": [
+    {
+      "claim_id": "m01",
+      "embedding": {
+        "space": "synthetic-smoke-v1",
+        "vector": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "provenance": {
+          "kind": "synthetic",
+          "note": "Identical vectors for plumbing only; no semantic or model-quality evidence."
+        }
+      }
+    },
+    {
+      "claim_id": "m02",
+      "embedding": {
+        "space": "synthetic-smoke-v1",
+        "vector": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "provenance": {
+          "kind": "synthetic",
+          "note": "Identical vectors for plumbing only; no semantic or model-quality evidence."
+        }
+      }
+    },
+    {
+      "claim_id": "m03",
+      "embedding": {
+        "space": "synthetic-smoke-v1",
+        "vector": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "provenance": {
+          "kind": "synthetic",
+          "note": "Identical vectors for plumbing only; no semantic or model-quality evidence."
+        }
+      }
+    },
+    {
+      "claim_id": "m04",
+      "embedding": {
+        "space": "synthetic-smoke-v1",
+        "vector": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "provenance": {
+          "kind": "synthetic",
+          "note": "Identical vectors for plumbing only; no semantic or model-quality evidence."
+        }
+      }
+    },
+    {
+      "claim_id": "m05",
+      "embedding": {
+        "space": "synthetic-smoke-v1",
+        "vector": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "provenance": {
+          "kind": "synthetic",
+          "note": "Identical vectors for plumbing only; no semantic or model-quality evidence."
+        }
+      }
+    },
+    {
+      "claim_id": "m06",
+      "embedding": {
+        "space": "synthetic-smoke-v1",
+        "vector": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "provenance": {
+          "kind": "synthetic",
+          "note": "Identical vectors for plumbing only; no semantic or model-quality evidence."
+        }
+      }
+    },
+    {
+      "claim_id": "m07",
+      "embedding": {
+        "space": "synthetic-smoke-v1",
+        "vector": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "provenance": {
+          "kind": "synthetic",
+          "note": "Identical vectors for plumbing only; no semantic or model-quality evidence."
+        }
+      }
+    },
+    {
+      "claim_id": "m08",
+      "embedding": {
+        "space": "synthetic-smoke-v1",
+        "vector": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "provenance": {
+          "kind": "synthetic",
+          "note": "Identical vectors for plumbing only; no semantic or model-quality evidence."
+        }
+      }
+    },
+    {
+      "claim_id": "m09",
+      "embedding": {
+        "space": "synthetic-smoke-v1",
+        "vector": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "provenance": {
+          "kind": "synthetic",
+          "note": "Identical vectors for plumbing only; no semantic or model-quality evidence."
+        }
+      }
+    },
+    {
+      "claim_id": "m10",
+      "embedding": {
+        "space": "synthetic-smoke-v1",
+        "vector": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "provenance": {
+          "kind": "synthetic",
+          "note": "Identical vectors for plumbing only; no semantic or model-quality evidence."
+        }
+      }
+    }
+  ]
+}

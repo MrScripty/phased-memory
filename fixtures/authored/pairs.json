@@ -1,0 +1,1257 @@
+[
+  {
+    "id": "same-time-negation",
+    "a": {
+      "id": "pair-001-a",
+      "normalized": "Alice trusts Bob (affirmed)",
+      "triple": {
+        "subject": "Alice",
+        "predicate": "trusts",
+        "object": "Bob",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "Alice",
+        "Bob"
+      ],
+      "source": "Authored source: Alice trusts Bob (affirmed).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": []
+    },
+    "b": {
+      "id": "pair-001-b",
+      "normalized": "Alice trusts Bob (negated)",
+      "triple": {
+        "subject": "Alice",
+        "predicate": "trusts",
+        "object": "Bob",
+        "polarity": "negated"
+      },
+      "entities": [
+        "Alice",
+        "Bob"
+      ],
+      "source": "Authored source: Alice trusts Bob (negated).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": []
+    },
+    "expected": {
+      "relationship": "contradicts",
+      "temporal_order": "same_time",
+      "update_type": "none"
+    }
+  },
+  {
+    "id": "later-trust-change",
+    "a": {
+      "id": "pair-002-a",
+      "normalized": "Alice trusts Bob (affirmed)",
+      "triple": {
+        "subject": "Alice",
+        "predicate": "trusts",
+        "object": "Bob",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "Alice",
+        "Bob"
+      ],
+      "source": "Authored source: Alice trusts Bob (affirmed).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": []
+    },
+    "b": {
+      "id": "pair-002-b",
+      "normalized": "Alice trusts Bob (negated)",
+      "triple": {
+        "subject": "Alice",
+        "predicate": "trusts",
+        "object": "Bob",
+        "polarity": "negated"
+      },
+      "entities": [
+        "Alice",
+        "Bob"
+      ],
+      "source": "Authored source: Alice trusts Bob (negated).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 10
+      },
+      "qualifiers": []
+    },
+    "expected": {
+      "relationship": "compatible",
+      "temporal_order": "b_later",
+      "update_type": "state_change"
+    }
+  },
+  {
+    "id": "late-ingested-flashback",
+    "a": {
+      "id": "pair-003-a",
+      "normalized": "gate is locked (affirmed)",
+      "triple": {
+        "subject": "gate",
+        "predicate": "is",
+        "object": "locked",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "gate",
+        "locked"
+      ],
+      "source": "Authored source: gate is locked (affirmed).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 10
+      },
+      "qualifiers": []
+    },
+    "b": {
+      "id": "pair-003-b",
+      "normalized": "gate is locked (negated)",
+      "triple": {
+        "subject": "gate",
+        "predicate": "is",
+        "object": "locked",
+        "polarity": "negated"
+      },
+      "entities": [
+        "gate",
+        "locked"
+      ],
+      "source": "Authored source: gate is locked (negated).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 8
+      },
+      "qualifiers": []
+    },
+    "expected": {
+      "relationship": "compatible",
+      "temporal_order": "b_earlier",
+      "update_type": "state_change"
+    }
+  },
+  {
+    "id": "author-correction",
+    "a": {
+      "id": "pair-004-a",
+      "normalized": "car color red (affirmed)",
+      "triple": {
+        "subject": "car",
+        "predicate": "color",
+        "object": "red",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "car",
+        "red"
+      ],
+      "source": "Authored source: car color red (affirmed).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": []
+    },
+    "b": {
+      "id": "pair-004-b",
+      "normalized": "car color blue (affirmed)",
+      "triple": {
+        "subject": "car",
+        "predicate": "color",
+        "object": "blue",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "car",
+        "blue"
+      ],
+      "source": "Authored source: car color blue (affirmed).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": [
+        "explicit_correction"
+      ]
+    },
+    "expected": {
+      "relationship": "contradicts",
+      "temporal_order": "same_time",
+      "update_type": "explicit_correction"
+    }
+  },
+  {
+    "id": "lying-dialogue",
+    "a": {
+      "id": "pair-005-a",
+      "normalized": "safe contains diamond (negated)",
+      "triple": {
+        "subject": "safe",
+        "predicate": "contains",
+        "object": "diamond",
+        "polarity": "negated"
+      },
+      "entities": [
+        "safe",
+        "diamond"
+      ],
+      "source": "Authored source: safe contains diamond (negated).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": []
+    },
+    "b": {
+      "id": "pair-005-b",
+      "normalized": "safe contains diamond (affirmed)",
+      "triple": {
+        "subject": "safe",
+        "predicate": "contains",
+        "object": "diamond",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "safe",
+        "diamond"
+      ],
+      "source": "Authored source: safe contains diamond (affirmed).",
+      "perspective": "Bob:speech",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": [
+        "lie"
+      ]
+    },
+    "expected": {
+      "relationship": "compatible",
+      "temporal_order": "same_time",
+      "update_type": "none"
+    }
+  },
+  {
+    "id": "belief-and-world",
+    "a": {
+      "id": "pair-006-a",
+      "normalized": "Bob located city (affirmed)",
+      "triple": {
+        "subject": "Bob",
+        "predicate": "located",
+        "object": "city",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "Bob",
+        "city"
+      ],
+      "source": "Authored source: Bob located city (affirmed).",
+      "perspective": "Alice:belief",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": []
+    },
+    "b": {
+      "id": "pair-006-b",
+      "normalized": "Bob located city (negated)",
+      "triple": {
+        "subject": "Bob",
+        "predicate": "located",
+        "object": "city",
+        "polarity": "negated"
+      },
+      "entities": [
+        "Bob",
+        "city"
+      ],
+      "source": "Authored source: Bob located city (negated).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": []
+    },
+    "expected": {
+      "relationship": "compatible",
+      "temporal_order": "same_time",
+      "update_type": "none"
+    }
+  },
+  {
+    "id": "reversed-direction",
+    "a": {
+      "id": "pair-007-a",
+      "normalized": "Alice trusts Bob (affirmed)",
+      "triple": {
+        "subject": "Alice",
+        "predicate": "trusts",
+        "object": "Bob",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "Alice",
+        "Bob"
+      ],
+      "source": "Authored source: Alice trusts Bob (affirmed).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": []
+    },
+    "b": {
+      "id": "pair-007-b",
+      "normalized": "Bob trusts Alice (affirmed)",
+      "triple": {
+        "subject": "Bob",
+        "predicate": "trusts",
+        "object": "Alice",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "Bob",
+        "Alice"
+      ],
+      "source": "Authored source: Bob trusts Alice (affirmed).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": []
+    },
+    "expected": {
+      "relationship": "compatible",
+      "temporal_order": "same_time",
+      "update_type": "none"
+    }
+  },
+  {
+    "id": "intended-move",
+    "a": {
+      "id": "pair-008-a",
+      "normalized": "key located drawer (affirmed)",
+      "triple": {
+        "subject": "key",
+        "predicate": "located",
+        "object": "drawer",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "key",
+        "drawer"
+      ],
+      "source": "Authored source: key located drawer (affirmed).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": []
+    },
+    "b": {
+      "id": "pair-008-b",
+      "normalized": "key located box (affirmed)",
+      "triple": {
+        "subject": "key",
+        "predicate": "located",
+        "object": "box",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "key",
+        "box"
+      ],
+      "source": "Authored source: key located box (affirmed).",
+      "perspective": "Alice:intention",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": [
+        "intention"
+      ]
+    },
+    "expected": {
+      "relationship": "compatible",
+      "temporal_order": "same_time",
+      "update_type": "none"
+    }
+  },
+  {
+    "id": "missing-time",
+    "a": {
+      "id": "pair-009-a",
+      "normalized": "gate is open (affirmed)",
+      "triple": {
+        "subject": "gate",
+        "predicate": "is",
+        "object": "open",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "gate",
+        "open"
+      ],
+      "source": "Authored source: gate is open (affirmed).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": null,
+      "qualifiers": []
+    },
+    "b": {
+      "id": "pair-009-b",
+      "normalized": "gate is open (negated)",
+      "triple": {
+        "subject": "gate",
+        "predicate": "is",
+        "object": "open",
+        "polarity": "negated"
+      },
+      "entities": [
+        "gate",
+        "open"
+      ],
+      "source": "Authored source: gate is open (negated).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": []
+    },
+    "expected": {
+      "relationship": "insufficient_information",
+      "temporal_order": "unknown",
+      "update_type": "undetermined"
+    }
+  },
+  {
+    "id": "supporting-paraphrase",
+    "a": {
+      "id": "pair-010-a",
+      "normalized": "Alice trusts Bob (affirmed)",
+      "triple": {
+        "subject": "Alice",
+        "predicate": "trusts",
+        "object": "Bob",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "Alice",
+        "Bob"
+      ],
+      "source": "Authored source: Alice trusts Bob (affirmed).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": []
+    },
+    "b": {
+      "id": "pair-010-b",
+      "normalized": "Bob is trusted by Alice.",
+      "triple": {
+        "subject": "Alice",
+        "predicate": "trusts",
+        "object": "Bob",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "Alice",
+        "Bob"
+      ],
+      "source": "Authored source: Alice trusts Bob (affirmed).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": []
+    },
+    "expected": {
+      "relationship": "supports",
+      "temporal_order": "same_time",
+      "update_type": "none"
+    }
+  },
+  {
+    "id": "exact-count-conflict",
+    "a": {
+      "id": "pair-011-a",
+      "normalized": "room occupant_count 2 (affirmed)",
+      "triple": {
+        "subject": "room",
+        "predicate": "occupant_count",
+        "object": "2",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "room",
+        "2"
+      ],
+      "source": "Authored source: room occupant_count 2 (affirmed).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": []
+    },
+    "b": {
+      "id": "pair-011-b",
+      "normalized": "room occupant_count 3 (affirmed)",
+      "triple": {
+        "subject": "room",
+        "predicate": "occupant_count",
+        "object": "3",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "room",
+        "3"
+      ],
+      "source": "Authored source: room occupant_count 3 (affirmed).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": []
+    },
+    "expected": {
+      "relationship": "contradicts",
+      "temporal_order": "same_time",
+      "update_type": "none"
+    }
+  },
+  {
+    "id": "exclusive-location",
+    "a": {
+      "id": "pair-012-a",
+      "normalized": "key located drawer (affirmed)",
+      "triple": {
+        "subject": "key",
+        "predicate": "located",
+        "object": "drawer",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "key",
+        "drawer"
+      ],
+      "source": "Authored source: key located drawer (affirmed).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": []
+    },
+    "b": {
+      "id": "pair-012-b",
+      "normalized": "key located box (affirmed)",
+      "triple": {
+        "subject": "key",
+        "predicate": "located",
+        "object": "box",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "key",
+        "box"
+      ],
+      "source": "Authored source: key located box (affirmed).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": []
+    },
+    "expected": {
+      "relationship": "contradicts",
+      "temporal_order": "same_time",
+      "update_type": "none"
+    }
+  },
+  {
+    "id": "ambiguous-identity",
+    "a": {
+      "id": "pair-013-a",
+      "normalized": "Alex#unknown located city (affirmed)",
+      "triple": {
+        "subject": "Alex#unknown",
+        "predicate": "located",
+        "object": "city",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "Alex#unknown",
+        "city"
+      ],
+      "source": "Authored source: Alex#unknown located city (affirmed).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": []
+    },
+    "b": {
+      "id": "pair-013-b",
+      "normalized": "Alex#2 located city (negated)",
+      "triple": {
+        "subject": "Alex#2",
+        "predicate": "located",
+        "object": "city",
+        "polarity": "negated"
+      },
+      "entities": [
+        "Alex#2",
+        "city"
+      ],
+      "source": "Authored source: Alex#2 located city (negated).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": []
+    },
+    "expected": {
+      "relationship": "insufficient_information",
+      "temporal_order": "same_time",
+      "update_type": "undetermined"
+    }
+  },
+  {
+    "id": "separate-continuities",
+    "a": {
+      "id": "pair-014-a",
+      "normalized": "Alice trusts Bob (affirmed)",
+      "triple": {
+        "subject": "Alice",
+        "predicate": "trusts",
+        "object": "Bob",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "Alice",
+        "Bob"
+      ],
+      "source": "Authored source: Alice trusts Bob (affirmed).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": []
+    },
+    "b": {
+      "id": "pair-014-b",
+      "normalized": "Alice trusts Bob (negated)",
+      "triple": {
+        "subject": "Alice",
+        "predicate": "trusts",
+        "object": "Bob",
+        "polarity": "negated"
+      },
+      "entities": [
+        "Alice",
+        "Bob"
+      ],
+      "source": "Authored source: Alice trusts Bob (negated).",
+      "perspective": "world",
+      "continuity": "alternate",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": []
+    },
+    "expected": {
+      "relationship": "compatible",
+      "temporal_order": "unknown",
+      "update_type": "none"
+    }
+  },
+  {
+    "id": "missing-speaker",
+    "a": {
+      "id": "pair-015-a",
+      "normalized": "Alice trusts Bob (affirmed)",
+      "triple": {
+        "subject": "Alice",
+        "predicate": "trusts",
+        "object": "Bob",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "Alice",
+        "Bob"
+      ],
+      "source": "Authored source: Alice trusts Bob (affirmed).",
+      "perspective": "unknown:speech",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": []
+    },
+    "b": {
+      "id": "pair-015-b",
+      "normalized": "Alice trusts Bob (negated)",
+      "triple": {
+        "subject": "Alice",
+        "predicate": "trusts",
+        "object": "Bob",
+        "polarity": "negated"
+      },
+      "entities": [
+        "Alice",
+        "Bob"
+      ],
+      "source": "Authored source: Alice trusts Bob (negated).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": []
+    },
+    "expected": {
+      "relationship": "insufficient_information",
+      "temporal_order": "same_time",
+      "update_type": "undetermined"
+    }
+  },
+  {
+    "id": "wrong-person-negation",
+    "a": {
+      "id": "pair-016-a",
+      "normalized": "Alice trusts Bob (affirmed)",
+      "triple": {
+        "subject": "Alice",
+        "predicate": "trusts",
+        "object": "Bob",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "Alice",
+        "Bob"
+      ],
+      "source": "Authored source: Alice trusts Bob (affirmed).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": []
+    },
+    "b": {
+      "id": "pair-016-b",
+      "normalized": "Charlie trusts Bob (negated)",
+      "triple": {
+        "subject": "Charlie",
+        "predicate": "trusts",
+        "object": "Bob",
+        "polarity": "negated"
+      },
+      "entities": [
+        "Charlie",
+        "Bob"
+      ],
+      "source": "Authored source: Charlie trusts Bob (negated).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": []
+    },
+    "expected": {
+      "relationship": "compatible",
+      "temporal_order": "same_time",
+      "update_type": "none"
+    }
+  },
+  {
+    "id": "same-negative-support",
+    "a": {
+      "id": "pair-017-a",
+      "normalized": "Alice trusts Bob (negated)",
+      "triple": {
+        "subject": "Alice",
+        "predicate": "trusts",
+        "object": "Bob",
+        "polarity": "negated"
+      },
+      "entities": [
+        "Alice",
+        "Bob"
+      ],
+      "source": "Authored source: Alice trusts Bob (negated).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": []
+    },
+    "b": {
+      "id": "pair-017-b",
+      "normalized": "Alice trusts Bob (negated)",
+      "triple": {
+        "subject": "Alice",
+        "predicate": "trusts",
+        "object": "Bob",
+        "polarity": "negated"
+      },
+      "entities": [
+        "Alice",
+        "Bob"
+      ],
+      "source": "Authored source: Alice trusts Bob (negated).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": []
+    },
+    "expected": {
+      "relationship": "supports",
+      "temporal_order": "same_time",
+      "update_type": "none"
+    }
+  },
+  {
+    "id": "past-stable-state",
+    "a": {
+      "id": "pair-018-a",
+      "normalized": "Alice trusts Bob (affirmed)",
+      "triple": {
+        "subject": "Alice",
+        "predicate": "trusts",
+        "object": "Bob",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "Alice",
+        "Bob"
+      ],
+      "source": "Authored source: Alice trusts Bob (affirmed).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 8
+      },
+      "qualifiers": []
+    },
+    "b": {
+      "id": "pair-018-b",
+      "normalized": "Alice trusts Bob (affirmed)",
+      "triple": {
+        "subject": "Alice",
+        "predicate": "trusts",
+        "object": "Bob",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "Alice",
+        "Bob"
+      ],
+      "source": "Authored source: Alice trusts Bob (affirmed).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": []
+    },
+    "expected": {
+      "relationship": "compatible",
+      "temporal_order": "b_later",
+      "update_type": "none"
+    }
+  },
+  {
+    "id": "opposite-beliefs",
+    "a": {
+      "id": "pair-019-a",
+      "normalized": "Alice trusts Bob (affirmed)",
+      "triple": {
+        "subject": "Alice",
+        "predicate": "trusts",
+        "object": "Bob",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "Alice",
+        "Bob"
+      ],
+      "source": "Authored source: Alice trusts Bob (affirmed).",
+      "perspective": "Alice:belief",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": []
+    },
+    "b": {
+      "id": "pair-019-b",
+      "normalized": "Alice trusts Bob (negated)",
+      "triple": {
+        "subject": "Alice",
+        "predicate": "trusts",
+        "object": "Bob",
+        "polarity": "negated"
+      },
+      "entities": [
+        "Alice",
+        "Bob"
+      ],
+      "source": "Authored source: Alice trusts Bob (negated).",
+      "perspective": "Charlie:belief",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": []
+    },
+    "expected": {
+      "relationship": "compatible",
+      "temporal_order": "same_time",
+      "update_type": "none"
+    }
+  },
+  {
+    "id": "question-not-fact",
+    "a": {
+      "id": "pair-020-a",
+      "normalized": "Alice trusts Bob (affirmed)",
+      "triple": {
+        "subject": "Alice",
+        "predicate": "trusts",
+        "object": "Bob",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "Alice",
+        "Bob"
+      ],
+      "source": "Authored source: Alice trusts Bob (affirmed).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": []
+    },
+    "b": {
+      "id": "pair-020-b",
+      "normalized": "Alice trusts Bob (unknown)",
+      "triple": {
+        "subject": "Alice",
+        "predicate": "trusts",
+        "object": "Bob",
+        "polarity": "unknown"
+      },
+      "entities": [
+        "Alice",
+        "Bob"
+      ],
+      "source": "Authored source: Alice trusts Bob (unknown).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": [
+        "question"
+      ]
+    },
+    "expected": {
+      "relationship": "insufficient_information",
+      "temporal_order": "same_time",
+      "update_type": "undetermined"
+    }
+  },
+  {
+    "id": "same-time-mutual-exclusion",
+    "a": {
+      "id": "pair-021-a",
+      "normalized": "lamp is on (affirmed)",
+      "triple": {
+        "subject": "lamp",
+        "predicate": "is",
+        "object": "on",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "lamp",
+        "on"
+      ],
+      "source": "Authored source: lamp is on (affirmed).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": []
+    },
+    "b": {
+      "id": "pair-021-b",
+      "normalized": "lamp is on (negated)",
+      "triple": {
+        "subject": "lamp",
+        "predicate": "is",
+        "object": "on",
+        "polarity": "negated"
+      },
+      "entities": [
+        "lamp",
+        "on"
+      ],
+      "source": "Authored source: lamp is on (negated).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": []
+    },
+    "expected": {
+      "relationship": "contradicts",
+      "temporal_order": "same_time",
+      "update_type": "none"
+    }
+  },
+  {
+    "id": "earlier-stable-state",
+    "a": {
+      "id": "pair-022-a",
+      "normalized": "Alice trusts Bob (affirmed)",
+      "triple": {
+        "subject": "Alice",
+        "predicate": "trusts",
+        "object": "Bob",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "Alice",
+        "Bob"
+      ],
+      "source": "Authored source: Alice trusts Bob (affirmed).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 10
+      },
+      "qualifiers": []
+    },
+    "b": {
+      "id": "pair-022-b",
+      "normalized": "Alice trusts Bob (affirmed)",
+      "triple": {
+        "subject": "Alice",
+        "predicate": "trusts",
+        "object": "Bob",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "Alice",
+        "Bob"
+      ],
+      "source": "Authored source: Alice trusts Bob (affirmed).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 8
+      },
+      "qualifiers": []
+    },
+    "expected": {
+      "relationship": "compatible",
+      "temporal_order": "b_earlier",
+      "update_type": "none"
+    }
+  },
+  {
+    "id": "unrelated-predicates",
+    "a": {
+      "id": "pair-023-a",
+      "normalized": "Alice trusts Bob (affirmed)",
+      "triple": {
+        "subject": "Alice",
+        "predicate": "trusts",
+        "object": "Bob",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "Alice",
+        "Bob"
+      ],
+      "source": "Authored source: Alice trusts Bob (affirmed).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": []
+    },
+    "b": {
+      "id": "pair-023-b",
+      "normalized": "Alice knows Bob (affirmed)",
+      "triple": {
+        "subject": "Alice",
+        "predicate": "knows",
+        "object": "Bob",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "Alice",
+        "Bob"
+      ],
+      "source": "Authored source: Alice knows Bob (affirmed).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 9
+      },
+      "qualifiers": []
+    },
+    "expected": {
+      "relationship": "compatible",
+      "temporal_order": "same_time",
+      "update_type": "none"
+    }
+  },
+  {
+    "id": "correction-does-not-move-time",
+    "a": {
+      "id": "pair-024-a",
+      "normalized": "car color red (affirmed)",
+      "triple": {
+        "subject": "car",
+        "predicate": "color",
+        "object": "red",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "car",
+        "red"
+      ],
+      "source": "Authored source: car color red (affirmed).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 8
+      },
+      "qualifiers": []
+    },
+    "b": {
+      "id": "pair-024-b",
+      "normalized": "car color blue (affirmed)",
+      "triple": {
+        "subject": "car",
+        "predicate": "color",
+        "object": "blue",
+        "polarity": "affirmed"
+      },
+      "entities": [
+        "car",
+        "blue"
+      ],
+      "source": "Authored source: car color blue (affirmed).",
+      "perspective": "world",
+      "continuity": "main",
+      "story_time": {
+        "timeline": "story",
+        "position": 8
+      },
+      "qualifiers": [
+        "explicit_correction"
+      ]
+    },
+    "expected": {
+      "relationship": "contradicts",
+      "temporal_order": "same_time",
+      "update_type": "explicit_correction"
+    }
+  }
+]

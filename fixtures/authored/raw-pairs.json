@@ -1,0 +1,242 @@
+[
+  {
+    "id": "same-time-negation",
+    "a_raw": "Alice trusts Bob (affirmed). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: [].",
+    "b_raw": "Alice trusts Bob (negated). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: [].",
+    "expected": {
+      "relationship": "contradicts",
+      "temporal_order": "same_time",
+      "update_type": "none"
+    }
+  },
+  {
+    "id": "later-trust-change",
+    "a_raw": "Alice trusts Bob (affirmed). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: [].",
+    "b_raw": "Alice trusts Bob (negated). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 10}; qualifiers: [].",
+    "expected": {
+      "relationship": "compatible",
+      "temporal_order": "b_later",
+      "update_type": "state_change"
+    }
+  },
+  {
+    "id": "late-ingested-flashback",
+    "a_raw": "gate is locked (affirmed). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 10}; qualifiers: [].",
+    "b_raw": "gate is locked (negated). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 8}; qualifiers: [].",
+    "expected": {
+      "relationship": "compatible",
+      "temporal_order": "b_earlier",
+      "update_type": "state_change"
+    }
+  },
+  {
+    "id": "author-correction",
+    "a_raw": "car color red (affirmed). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: [].",
+    "b_raw": "car color blue (affirmed). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: ['explicit_correction'].",
+    "expected": {
+      "relationship": "contradicts",
+      "temporal_order": "same_time",
+      "update_type": "explicit_correction"
+    }
+  },
+  {
+    "id": "lying-dialogue",
+    "a_raw": "safe contains diamond (negated). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: [].",
+    "b_raw": "safe contains diamond (affirmed). Perspective: Bob:speech; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: ['lie'].",
+    "expected": {
+      "relationship": "compatible",
+      "temporal_order": "same_time",
+      "update_type": "none"
+    }
+  },
+  {
+    "id": "belief-and-world",
+    "a_raw": "Bob located city (affirmed). Perspective: Alice:belief; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: [].",
+    "b_raw": "Bob located city (negated). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: [].",
+    "expected": {
+      "relationship": "compatible",
+      "temporal_order": "same_time",
+      "update_type": "none"
+    }
+  },
+  {
+    "id": "reversed-direction",
+    "a_raw": "Alice trusts Bob (affirmed). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: [].",
+    "b_raw": "Bob trusts Alice (affirmed). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: [].",
+    "expected": {
+      "relationship": "compatible",
+      "temporal_order": "same_time",
+      "update_type": "none"
+    }
+  },
+  {
+    "id": "intended-move",
+    "a_raw": "key located drawer (affirmed). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: [].",
+    "b_raw": "key located box (affirmed). Perspective: Alice:intention; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: ['intention'].",
+    "expected": {
+      "relationship": "compatible",
+      "temporal_order": "same_time",
+      "update_type": "none"
+    }
+  },
+  {
+    "id": "missing-time",
+    "a_raw": "gate is open (affirmed). Perspective: world; continuity: main; story time: None; qualifiers: [].",
+    "b_raw": "gate is open (negated). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: [].",
+    "expected": {
+      "relationship": "insufficient_information",
+      "temporal_order": "unknown",
+      "update_type": "undetermined"
+    }
+  },
+  {
+    "id": "supporting-paraphrase",
+    "a_raw": "Alice trusts Bob (affirmed). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: [].",
+    "b_raw": "Bob is trusted by Alice.. Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: [].",
+    "expected": {
+      "relationship": "supports",
+      "temporal_order": "same_time",
+      "update_type": "none"
+    }
+  },
+  {
+    "id": "exact-count-conflict",
+    "a_raw": "room occupant_count 2 (affirmed). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: [].",
+    "b_raw": "room occupant_count 3 (affirmed). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: [].",
+    "expected": {
+      "relationship": "contradicts",
+      "temporal_order": "same_time",
+      "update_type": "none"
+    }
+  },
+  {
+    "id": "exclusive-location",
+    "a_raw": "key located drawer (affirmed). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: [].",
+    "b_raw": "key located box (affirmed). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: [].",
+    "expected": {
+      "relationship": "contradicts",
+      "temporal_order": "same_time",
+      "update_type": "none"
+    }
+  },
+  {
+    "id": "ambiguous-identity",
+    "a_raw": "Alex#unknown located city (affirmed). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: [].",
+    "b_raw": "Alex#2 located city (negated). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: [].",
+    "expected": {
+      "relationship": "insufficient_information",
+      "temporal_order": "same_time",
+      "update_type": "undetermined"
+    }
+  },
+  {
+    "id": "separate-continuities",
+    "a_raw": "Alice trusts Bob (affirmed). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: [].",
+    "b_raw": "Alice trusts Bob (negated). Perspective: world; continuity: alternate; story time: {'timeline': 'story', 'position': 9}; qualifiers: [].",
+    "expected": {
+      "relationship": "compatible",
+      "temporal_order": "unknown",
+      "update_type": "none"
+    }
+  },
+  {
+    "id": "missing-speaker",
+    "a_raw": "Alice trusts Bob (affirmed). Perspective: unknown:speech; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: [].",
+    "b_raw": "Alice trusts Bob (negated). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: [].",
+    "expected": {
+      "relationship": "insufficient_information",
+      "temporal_order": "same_time",
+      "update_type": "undetermined"
+    }
+  },
+  {
+    "id": "wrong-person-negation",
+    "a_raw": "Alice trusts Bob (affirmed). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: [].",
+    "b_raw": "Charlie trusts Bob (negated). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: [].",
+    "expected": {
+      "relationship": "compatible",
+      "temporal_order": "same_time",
+      "update_type": "none"
+    }
+  },
+  {
+    "id": "same-negative-support",
+    "a_raw": "Alice trusts Bob (negated). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: [].",
+    "b_raw": "Alice trusts Bob (negated). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: [].",
+    "expected": {
+      "relationship": "supports",
+      "temporal_order": "same_time",
+      "update_type": "none"
+    }
+  },
+  {
+    "id": "past-stable-state",
+    "a_raw": "Alice trusts Bob (affirmed). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 8}; qualifiers: [].",
+    "b_raw": "Alice trusts Bob (affirmed). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: [].",
+    "expected": {
+      "relationship": "compatible",
+      "temporal_order": "b_later",
+      "update_type": "none"
+    }
+  },
+  {
+    "id": "opposite-beliefs",
+    "a_raw": "Alice trusts Bob (affirmed). Perspective: Alice:belief; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: [].",
+    "b_raw": "Alice trusts Bob (negated). Perspective: Charlie:belief; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: [].",
+    "expected": {
+      "relationship": "compatible",
+      "temporal_order": "same_time",
+      "update_type": "none"
+    }
+  },
+  {
+    "id": "question-not-fact",
+    "a_raw": "Alice trusts Bob (affirmed). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: [].",
+    "b_raw": "Alice trusts Bob (unknown). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: ['question'].",
+    "expected": {
+      "relationship": "insufficient_information",
+      "temporal_order": "same_time",
+      "update_type": "undetermined"
+    }
+  },
+  {
+    "id": "same-time-mutual-exclusion",
+    "a_raw": "lamp is on (affirmed). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: [].",
+    "b_raw": "lamp is on (negated). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: [].",
+    "expected": {
+      "relationship": "contradicts",
+      "temporal_order": "same_time",
+      "update_type": "none"
+    }
+  },
+  {
+    "id": "earlier-stable-state",
+    "a_raw": "Alice trusts Bob (affirmed). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 10}; qualifiers: [].",
+    "b_raw": "Alice trusts Bob (affirmed). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 8}; qualifiers: [].",
+    "expected": {
+      "relationship": "compatible",
+      "temporal_order": "b_earlier",
+      "update_type": "none"
+    }
+  },
+  {
+    "id": "unrelated-predicates",
+    "a_raw": "Alice trusts Bob (affirmed). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: [].",
+    "b_raw": "Alice knows Bob (affirmed). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 9}; qualifiers: [].",
+    "expected": {
+      "relationship": "compatible",
+      "temporal_order": "same_time",
+      "update_type": "none"
+    }
+  },
+  {
+    "id": "correction-does-not-move-time",
+    "a_raw": "car color red (affirmed). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 8}; qualifiers: [].",
+    "b_raw": "car color blue (affirmed). Perspective: world; continuity: main; story time: {'timeline': 'story', 'position': 8}; qualifiers: ['explicit_correction'].",
+    "expected": {
+      "relationship": "contradicts",
+      "temporal_order": "same_time",
+      "update_type": "explicit_correction"
+    }
+  }
+]
