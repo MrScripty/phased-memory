@@ -13,7 +13,7 @@ The default check verifies the preserved files and runs 150 integrity/scorer ass
 
 ## Original Stage A and B
 
-Use a separate runtime configuration with exact model/profile selections and `decision_adapter: "original_json_v1"`. This explicitly selects this consumer's original-pack JSON prompt protocol for local-operator qualification; it is not a new Pumas capability or endpoint. Ordinary UI/authored relationship operations still use `decision_json_v1`. Both paths use the same public typed generation transport and generation fences; neither uses native probabilities.
+Use a separate runtime configuration with exact model/profile selections and `decision_adapter: "original_json_v1"`. This explicitly selects this consumer's original-pack JSON prompt protocol for local-operator qualification; it is not a new Pumas capability or endpoint. Ordinary UI/authored relationship operations use `decision_json_v1` or, for native decision models, `decision_native_v1`. The original-pack adapter is generation-only: it uses the public typed generation transport and generation fences and produces no native probabilities. A native decision model such as Kev offers no text generation, so it cannot serve `original_json_v1`.
 
 ```sh
 cargo run --locked -- original-stage-a config.local.json fixtures/original/pairs.jsonl /tmp/original-a.jsonl
