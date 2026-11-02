@@ -11,7 +11,7 @@ use axum::{
 use phased_memory::{
     domain::*,
     eval::*,
-    pumas::{Config, Pumas},
+    pumas::{Config, Pumas, Role, TextRole, DECISION_JSON_V1, DECISION_NATIVE_V1},
     store::{Comparison, DecisionEvidence, Filters, Store},
 };
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
@@ -149,21 +149,19 @@ fn ensure_new_output(path: &str) -> Result<()> {
 async fn observe_runtime(p: &Pumas) -> Result<Value> {
     let (fence, build) = p.discover().await?;
     let mut roles = serde_json::Map::new();
-    for (name, selection) in [
-        ("extraction", &p.config.extraction),
-        ("embedding", &p.config.embedding),
-        ("decision", &p.config.decision),
+    for (role, selection) in [
+        (Role::Extraction, &p.config.extraction),
+        (Role::Embedding, &p.config.embedding),
+        (Role::Decision, &p.config.decision),
     ] {
         let observation = match selection {
-            Some(selection) => match p.inspect(selection, &fence).await {
-                Ok(_) => {
-                    json!({"status":"advertised_only","model":selection.model,"profile":selection.profile})
-                }
+            Some(_) => match p.observe_role(role, &fence).await {
+                Ok(observed) => observed,
                 Err(error) => json!({"status":"unavailable","error":error.to_string()}),
             },
             None => json!({"status":"unconfigured"}),
         };
-        roles.insert(name.into(), observation);
+        roles.insert(role.name().into(), observation);
     }
     Ok(json!({"fence":fence,"build":build,"roles":roles,"inference":"unrun"}))
 }
@@ -185,7 +183,7 @@ async fn stage_c(
     let mut predictions = Vec::new();
     for case in &cases {
         let result = async {
-            let embedding = pumas.embed(&case.query_text).await?;
+            let embedding = pumas.embed(&case.query_text, TextRole::Query).await?;
             let mut comparison = store.compare_all(&embedding, &case.filters)?;
             if mode == "reranked" {
                 rerank(
@@ -236,7 +234,7 @@ async fn embed_batch(p: &Pumas, batch: &mut Ingest) -> Result<()> {
         c.validate()?;
         batch.embeddings.push(ClaimEmbedding {
             claim_id: c.id.clone(),
-            embedding: p.embed(&c.normalized).await?,
+            embedding: p.embed(&c.normalized, TextRole::Document).await?,
         });
     }
     Ok(())
@@ -272,10 +270,11 @@ fn query_claim(text: &str, f: &Filters) -> Claim {
     }
 }
 async fn rerank(p: &Pumas, query: &Claim, c: &mut Comparison) -> Result<()> {
+    let adapter = p.config.decision_adapter.clone().unwrap_or_default();
     ensure!(
-        p.config.decision_adapter.as_deref() == Some("decision_json_v1")
+        [DECISION_JSON_V1, DECISION_NATIVE_V1].contains(&adapter.as_str())
             && p.config.decision.is_some(),
-        "unavailable: operator-qualified decision adapter and exact model/profile required"
+        "unavailable: operator-qualified decision adapter and served decision model required"
     );
     let mut hits = c.structured.clone();
     if hits.is_empty() {
@@ -288,7 +287,10 @@ async fn rerank(p: &Pumas, query: &Claim, c: &mut Comparison) -> Result<()> {
     for h in &mut hits {
         let o = p.decide(query, &h.claim).await?;
         h.decision = Some(DecisionEvidence {
-            labels: o.value,
+            labels: o.value.labels,
+            adapter: o.value.adapter,
+            confidence: o.value.confidence,
+            native_answers: o.value.native_answers,
             provenance: o.provenance,
         });
     }
@@ -308,7 +310,9 @@ async fn rerank(p: &Pumas, query: &Claim, c: &mut Comparison) -> Result<()> {
     });
     hits.truncate(5);
     c.reranked = Some(hits);
-    c.rerank_status="completed: operator-qualified decision_json_v1; ordinal relation ordering, not probabilities".into();
+    c.rerank_status = format!(
+        "completed: operator-qualified {adapter}; ordinal relation ordering, not probabilities"
+    );
     Ok(())
 }
 #[derive(Clone)]
@@ -508,7 +512,7 @@ async fn api(State(s): State<App>, Json(action): Json<Action>) -> Response {
                         );
                         e
                     }
-                    None => s.pumas.embed(&text).await?,
+                    None => s.pumas.embed(&text, TextRole::Query).await?,
                 };
                 let mut c = s.with_store(|store| store.compare_all(&embedding, &filters))?;
                 if do_rerank {
