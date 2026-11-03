@@ -1,6 +1,6 @@
 # Verification scope
 
-The deterministic suite contains **41 tests**: 15 domain/storage/scorer tests, 11 original-pack integration tests, 11 phase/math/boundary tests and four public Pumas HTTP tests. The supported verification environment for this prototype is Linux x86_64 with Rust 1.99.1.
+The deterministic suite contains **53 tests**: 19 domain/storage/scorer/contract-parsing tests, 11 original-pack integration tests, 11 phase/math/boundary tests and 12 public Pumas HTTP tests. The supported verification environment for this prototype is Linux x86_64 with Rust 1.99.1.
 
 ```sh
 cargo fmt --all -- --check
@@ -18,7 +18,7 @@ CI defines the deterministic format/lint/test and 150-check original integrity/s
 
 Storage/math checks cover finite nonzero vectors, exact cosine, rollback, raw text retention, future-schema preservation, explicit story-time history, directed/perspective scopes, latest-state filtering, explicit exclusive state keys and namespaced extraction IDs. Scorer tests retain missing-result denominators and reject malformed/duplicate/unknown IDs and inconsistent extraction successes.
 
-Test-only loopback Pumas servers exercise actual HTTP discovery, exact identities, fences, stale-generation rejection, unavailable capability admission, correlation/result decoding, unknown outcomes and no retries. They are never exposed as an application inference fallback and never qualify real models.
+Test-only loopback Pumas servers mirror v0.8 response shapes (every capability descriptor with availability reasons, `streaming`, `context_tokens`, `model_id`/`provider`/`load_state`, and deliberately unknown capabilities, states, options, fields and malformed entries for other aliases). They exercise actual HTTP discovery, `/v1/served-models` profile discovery (sent only when required or pinned; ambiguous aliases refused), query/document embedding prefixes and their space identity, fences, stale-generation rejection, unavailable capability admission, correlation/result decoding, `not_admitted` rejections (null `request_id`, empty-body 412, unknown codes) with surfaced messages, unknown outcomes, native `decision` requests/results and adapter-mismatch refusal, and no retries. They are never exposed as an application inference fallback and never qualify real models.
 
 Original integration checks preserve every original row, selected primary and typed/null fields; isolate gold/diagnostics/raw scenes from decision prompts; retain model-selected extraction primaries without reference repair; expose all ten memories to original reranking; keep chronology separate; and roundtrip saved failures through the unchanged scorer. `verify_original_pack.py` performs 150 identity/arithmetic checks, or 160 when given the exact reference archive. See [archive identity](original-fixtures.md).
 
@@ -26,6 +26,6 @@ Phase checks cover the explicit polarity channels, ordered tuples, JSON types, n
 
 ## Unqualified claims
 
-Real extraction, embedding, relationship decisions and retrieval quality remain **unrun**. A compatible endpoint, exact model/profile identities and operator qualification are required. An advertised capability alone is insufficient. Native probability output is unavailable in the implemented inference runners. No phase advantage is claimed by an arithmetic identity or synthetic development set.
+Real extraction, embedding, relationship decisions and retrieval quality remain **unrun**. A compatible endpoint, exact model/profile identities and operator qualification are required. An advertised capability alone is insufficient. Native probabilities are available only through `decision_native_v1` and are uncalibrated model outputs. No phase advantage is claimed by an arithmetic identity or synthetic development set.
 
 Functional acceptance can include an honest negative result: runners retain all requested IDs and errors rather than pretending unavailable inference succeeded. The retained phase command can pass its numeric control while returning an explicitly unrun learned arm and a nonzero exit code. No model weights are downloaded by the application or deterministic checks.

@@ -1,5 +1,9 @@
 //! Scorers own gold labels; runners project only input data into inference.
-use crate::{domain::*, pumas::Pumas, store::Filters};
+use crate::{
+    domain::*,
+    pumas::{Decision, Observed, Pumas},
+    store::Filters,
+};
 use anyhow::{ensure, Result};
 use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
@@ -187,6 +191,30 @@ pub fn score_pairs(cases: &[PairCase], predictions: &[PairPrediction]) -> Result
     let n = cases.len() as f64;
     Ok(PairScore{total:cases.len(),completed,relationship_accuracy:correct as f64/n,relationship_macro_f1:f1/4.0,temporal_accuracy:temporal as f64/n,update_accuracy:update as f64/n,joint_accuracy:joint as f64/n,confusion,brier:if brier_count==cases.len(){Some(brier_sum/n)}else{None},brier_covered:brier_count,brier_status:if brier_count==cases.len(){"complete native probabilities"}else{"unavailable: every scored case requires evidenced native probabilities; generated confidence is not probability"}.into()})
 }
+/// Native relationship probabilities are retained only when they form the
+/// complete normalized vector the scorer accepts. They are temperature-scaled
+/// model outputs, not calibrated probabilities; Brier measures exactly that.
+fn prediction(id: &str, o: Observed<Decision>) -> PairPrediction {
+    let native_probabilities = o
+        .value
+        .relationship_probabilities()
+        .filter(|p| (p.values().sum::<f64>() - 1.0).abs() < 1e-6)
+        .map(|values| NativeProbabilities {
+            values,
+            provenance: o.provenance.clone(),
+            native_evidence: format!(
+                "{} relationship choice probabilities from the Pumas decision capability; temperature-scaled, not calibrated",
+                o.value.adapter
+            ),
+        });
+    PairPrediction {
+        id: id.into(),
+        labels: Some(o.value.labels),
+        error: None,
+        provenance: Some(o.provenance),
+        native_probabilities,
+    }
+}
 pub async fn run_pairs(pumas: &Pumas, cases: &[PairCase]) -> Result<Vec<PairPrediction>> {
     unique(cases.iter().map(|c| c.id.as_str()))?;
     for c in cases {
@@ -197,13 +225,7 @@ pub async fn run_pairs(pumas: &Pumas, cases: &[PairCase]) -> Result<Vec<PairPred
     for c in cases {
         // Neither expected labels nor case ID is passed to the inference adapter.
         let prediction = match pumas.decide(&c.a, &c.b).await {
-            Ok(o) => PairPrediction {
-                id: c.id.clone(),
-                labels: Some(o.value),
-                error: None,
-                provenance: Some(o.provenance),
-                native_probabilities: None,
-            },
+            Ok(o) => prediction(&c.id, o),
             Err(e) => PairPrediction {
                 id: c.id.clone(),
                 labels: None,
@@ -260,13 +282,7 @@ pub async fn run_extraction(pumas: &Pumas, cases: &[RawPairCase]) -> Result<Vec<
         let decision = if let (Some(a), Some(b)) = (&a, &b) {
             if a.len() == 1 && b.len() == 1 {
                 match pumas.decide(&a[0], &b[0]).await {
-                    Ok(o) => PairPrediction {
-                        id: c.id.clone(),
-                        labels: Some(o.value),
-                        error: None,
-                        provenance: Some(o.provenance),
-                        native_probabilities: None,
-                    },
+                    Ok(o) => prediction(&c.id, o),
                     Err(e) => failure(&c.id, e.to_string()),
                 }
             } else {

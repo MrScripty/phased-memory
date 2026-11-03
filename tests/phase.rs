@@ -332,9 +332,9 @@ async fn mock_discovery(axum::extract::State(s): axum::extract::State<Mock>) -> 
         json!({"advertisement_schema_version":1,"endpoint":s.endpoint,"service_generation":"phase-service","instance":{"generation":"phase-instance"},"build_info":{"component":"test-only","package_version":"test","schemas":[{"name":"pumas.http-admission-fence","version":1}]}}),
     )
 }
-async fn mock_capabilities() -> axum::Json<Value> {
+async fn mock_served_models() -> axum::Json<Value> {
     axum::Json(
-        json!({"supported_contract_versions":[1],"model":"test-only","profile":"p","max_request_bytes":65536,"max_response_bytes":65536,"capabilities":[{"capability":"text_embedding","semantic_task":"text_embedding","input_formats":["text"],"output_formats":["embeddings_float32"],"availability":{"state":"available"},"option_bounds":[]}]}),
+        json!({"supported_contract_versions":[1],"max_request_bytes":65536,"max_response_bytes":65536,"models":[{"model":"test-only","profile":"p","profile_required":false,"capabilities":[{"capability":"text_embedding","semantic_task":"text_embedding","input_formats":["text"],"output_formats":["embeddings_float32"],"availability":{"state":"available"},"option_bounds":[]}]}]}),
     )
 }
 async fn mock_operation(
@@ -351,7 +351,7 @@ async fn mock_operation(
         (
             axum::http::StatusCode::BAD_GATEWAY,
             axum::Json(
-                json!({"contract_version":1,"request_id":request["request_id"],"error":{"code":"provider_failure","outcome":"unknown"}}),
+                json!({"contract_version":1,"request_id":request["request_id"],"error":{"code":"provider_failure","outcome":"unknown","message":"test provider failure"}}),
             ),
         )
     } else {
@@ -373,7 +373,7 @@ async fn mock(fail_first: bool) -> (Pumas, Mock, tokio::task::JoinHandle<()>) {
     };
     let app = axum::Router::new()
         .route("/.well-known/pumas", axum::routing::get(mock_discovery))
-        .route("/v1/capabilities", axum::routing::get(mock_capabilities))
+        .route("/v1/served-models", axum::routing::get(mock_served_models))
         .route("/v1/model-operations", axum::routing::post(mock_operation))
         .with_state(state.clone());
     let task = tokio::spawn(async move { axum::serve(listener, app).await.unwrap() });
@@ -382,8 +382,7 @@ async fn mock(fail_first: bool) -> (Pumas, Mock, tokio::task::JoinHandle<()>) {
         extraction: None,
         embedding: Some(phased_memory::pumas::Selection {
             model: "test-only".into(),
-            profile: "p".into(),
-            capability: "text_embedding".into(),
+            ..Default::default()
         }),
         decision: None,
         decision_adapter: None,

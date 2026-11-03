@@ -1,7 +1,7 @@
 //! Opt-in expected-equivalence control; this module makes no phase quality claim.
 use crate::{
     domain::{bounded, cosine, Polarity, Provenance, StoryTime},
-    pumas::Pumas,
+    pumas::{Pumas, TextRole},
 };
 use anyhow::{ensure, Context, Result};
 use serde::{Deserialize, Deserializer, Serialize};
@@ -486,7 +486,10 @@ pub async fn compare(pumas: &Pumas, input: &ExperimentInput) -> Result<Experimen
     let mut embeddings = Vec::new();
     let mut space: Option<String> = None;
     for item in &output.frozen.corpus {
-        match pumas.embed(&item.canonical_semantics).await {
+        match pumas
+            .embed(&item.canonical_semantics, TextRole::Document)
+            .await
+        {
             Ok(embedding) => {
                 if space.as_ref().is_some_and(|s| s != &embedding.space) {
                     corpus.push(EmbeddingCorpus {
@@ -530,7 +533,7 @@ pub async fn compare(pumas: &Pumas, input: &ExperimentInput) -> Result<Experimen
         let mut vector = None;
         let result = async {
             ensure!(complete, "unavailable: full frozen corpus embeddings required; no candidate reduction or synthetic fallback");
-            let query = pumas.embed(&item.canonical_semantics).await?;
+            let query = pumas.embed(&item.canonical_semantics, TextRole::Query).await?;
             provenance = Some(query.provenance.clone());
             vector = Some(query.vector.clone());
             ensure!(space.as_ref() == Some(&query.space), "unavailable: query embedding space differs from frozen corpus");

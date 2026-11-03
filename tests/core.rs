@@ -1,7 +1,10 @@
 use phased_memory::{
     domain::*,
     eval::*,
-    pumas::{endpoint, validate_capabilities, Capabilities, Selection},
+    pumas::{
+        endpoint, native_decision, operation_result, select_capability, Config, Decision, Pumas,
+        ServedModel,
+    },
     store::{Filters, Store},
 };
 use std::collections::{BTreeMap, BTreeSet};
@@ -352,7 +355,7 @@ fn retrieval_rejects_duplicate_and_unknown_rankings() {
     }
 }
 #[test]
-fn endpoint_validation_and_capability_identity_are_strict() {
+fn endpoint_validation_is_strict() {
     for bad in [
         "https://127.0.0.1:8080",
         "http://localhost:8080",
@@ -364,24 +367,216 @@ fn endpoint_validation_and_capability_identity_are_strict() {
         assert!(endpoint(bad).is_err(), "{bad}");
     }
     assert_eq!(endpoint("http://[::1]:8080/").unwrap(), "http://[::1]:8080");
-    let s = Selection {
-        model: "exact".into(),
-        profile: "p".into(),
-        capability: "text_embedding".into(),
+}
+fn served(capabilities: serde_json::Value) -> ServedModel {
+    serde_json::from_value(serde_json::json!({"model":"exact","profile":"p","model_id":"org/exact","provider":"llama_cpp","load_state":"loaded","profile_required":false,"future_field":{"nested":true},"capabilities":capabilities})).unwrap()
+}
+#[test]
+fn capabilities_are_selected_by_name_and_unknown_descriptors_are_ignored() {
+    let embedding = serde_json::json!({"capability":"text_embedding","semantic_task":"text_embedding","input_formats":["text","text_batch","future_format"],"output_formats":["embeddings_float32"],"streaming":false,"availability":{"state":"available"},"option_bounds":[{"option":"dimensions","minimum":1,"maximum":4294967295.0},{"option":"future_option","minimum":"x"}],"future":1});
+    // Unknown capabilities, malformed unused descriptors, unknown availability
+    // states and extra entries precede the one this consumer uses.
+    let s = served(serde_json::json!([
+        {"capability":"future_capability","shape":"unknown"},
+        {"capability":"decision","semantic_task":"decision","input_formats":["decision"],"output_formats":["decisions"],"availability":{"state":"degraded","reason":"future_reason"},"option_bounds":[]},
+        embedding.clone(),
+        {"capability":"audio_classification","availability":{"state":"unavailable","reason":"unsupported_adapter"}}
+    ]));
+    let d = select_capability(&s, &["text_embedding"]).unwrap();
+    assert_eq!(d.capability, "text_embedding");
+    let e = select_capability(&s, &["decision"])
+        .unwrap_err()
+        .to_string();
+    assert!(
+        e.contains("unavailable: selected capability decision: future_reason"),
+        "{e}"
+    );
+    let e = select_capability(&s, &["chat_generation", "text_generation"])
+        .unwrap_err()
+        .to_string();
+    assert!(
+        e.contains("chat_generation: not advertised; text_generation: not advertised"),
+        "{e}"
+    );
+    // Only the selected capability must be unambiguous.
+    let dup = served(serde_json::json!([embedding.clone(), embedding]));
+    assert!(select_capability(&dup, &["text_embedding"])
+        .unwrap_err()
+        .to_string()
+        .contains("duplicate text_embedding"));
+    // Preference order: chat first, then text generation.
+    let text = served(
+        serde_json::json!([{"capability":"text_generation","semantic_task":"text_generation","input_formats":["text"],"output_formats":["text"],"availability":{"state":"available"},"option_bounds":[]}]),
+    );
+    assert_eq!(
+        select_capability(&text, &["chat_generation", "text_generation"])
+            .unwrap()
+            .capability,
+        "text_generation"
+    );
+}
+#[test]
+fn typed_errors_are_examined_before_correlation() {
+    let body = |v: serde_json::Value| serde_json::to_vec(&v).unwrap();
+    // Unreadable request bodies are rejected with a null request_id: still not admitted.
+    let e = operation_result(400, &body(serde_json::json!({"contract_version":1,"request_id":null,"error":{"code":"invalid_request","outcome":"not_admitted","message":"request body is not valid JSON"}})), "mine").unwrap_err().to_string();
+    assert!(e.starts_with("not_admitted: Pumas operation invalid_request (HTTP 400): request body is not valid JSON"), "{e}");
+    assert!(!e.contains("never replay"), "{e}");
+    // Unknown codes and extra fields are tolerated; the message is surfaced.
+    let e = operation_result(429, &body(serde_json::json!({"contract_version":1,"request_id":"mine","error":{"code":"future_code","outcome":"not_admitted","message":"busy\nretry later","hint":1}})), "mine").unwrap_err().to_string();
+    assert!(
+        e.starts_with("not_admitted: Pumas operation future_code (HTTP 429): busy retry later"),
+        "{e}"
+    );
+    let e = operation_result(502, &body(serde_json::json!({"contract_version":1,"request_id":"mine","error":{"code":"provider_failure","outcome":"unknown","message":"llama.cpp reported: out of memory"}})), "mine").unwrap_err().to_string();
+    assert!(e.starts_with("unknown: Pumas operation provider_failure (HTTP 502): llama.cpp reported: out of memory; never replay"), "{e}");
+    // An unrecognized outcome stays conservative.
+    let e = operation_result(502, &body(serde_json::json!({"contract_version":1,"request_id":"mine","error":{"code":"x","outcome":"future_outcome","message":"m"}})), "mine").unwrap_err().to_string();
+    assert!(e.starts_with("unknown:"), "{e}");
+    // A different caller's ID is not trusted, even for not_admitted.
+    let e = operation_result(400, &body(serde_json::json!({"contract_version":1,"request_id":"theirs","error":{"code":"invalid_request","outcome":"not_admitted","message":"m"}})), "mine").unwrap_err().to_string();
+    assert!(
+        e.starts_with("unknown: Pumas error correlation mismatch"),
+        "{e}"
+    );
+    // A typed error with a success status is contradictory.
+    let e = operation_result(200, &body(serde_json::json!({"contract_version":1,"request_id":"mine","error":{"code":"invalid_request","outcome":"not_admitted","message":"m"}})), "mine").unwrap_err().to_string();
+    assert!(
+        e.starts_with("unknown: HTTP 200 contradicts typed error"),
+        "{e}"
+    );
+    // Empty-body fence refusals happen before admission.
+    for (status, text) in [
+        (412, "stale runtime generation"),
+        (503, "not admitting"),
+        (400, "fence headers"),
+    ] {
+        let e = operation_result(status, b"", "mine")
+            .unwrap_err()
+            .to_string();
+        assert!(
+            e.starts_with("not_admitted:") && e.contains(text),
+            "{status}: {e}"
+        );
+    }
+    assert!(operation_result(502, b"", "mine")
+        .unwrap_err()
+        .to_string()
+        .starts_with("unknown:"));
+    assert!(operation_result(200, b"not json", "mine")
+        .unwrap_err()
+        .to_string()
+        .starts_with("unknown: invalid Pumas JSON"));
+    // Success responses ignore unknown fields but stay correlated.
+    let ok = operation_result(200, &body(serde_json::json!({"contract_version":1,"request_id":"mine","result":{"kind":"embeddings","vectors":[[1.0]],"usage":{}},"timing":{}})), "mine").unwrap();
+    assert_eq!(ok["kind"], "embeddings");
+    assert!(operation_result(200, &body(serde_json::json!({"contract_version":1,"request_id":"other","result":{"kind":"embeddings"}})), "mine").unwrap_err().to_string().contains("correlation/version mismatch"));
+}
+#[test]
+fn native_decision_answers_map_to_labels_with_uncalibrated_probabilities() {
+    let result = serde_json::json!({"kind":"decisions","input_tokens":321,"future":true,"answers":{
+        "relationship":{"type":"choice","choice":"contradicts","confidence":0.7,"probabilities":{"supports":0.1,"contradicts":0.7,"compatible":0.15,"insufficient_information":0.05,"future_label":0.0}},
+        "temporal_order":{"type":"choice","choice":"same_time","confidence":0.6,"probabilities":{"same_time":0.6,"b_later":0.2,"b_earlier":0.1,"unknown":0.1}},
+        "update_type":{"type":"choice","choice":"none","confidence":0.9,"probabilities":{"none":0.9,"state_change":0.05,"explicit_correction":0.03,"undetermined":0.02}},
+        "extra_question":{"type":"noul","noul":0.5}}});
+    let (labels, answers) = native_decision(&result).unwrap();
+    assert_eq!(
+        labels,
+        Labels {
+            relationship: Relationship::Contradicts,
+            temporal_order: TemporalOrder::SameTime,
+            update_type: UpdateType::None
+        }
+    );
+    assert_eq!(answers["relationship"].probabilities.len(), 4);
+    let decision = Decision {
+        labels,
+        adapter: "decision_native_v1".into(),
+        confidence: Some(answers["relationship"].confidence),
+        native_answers: Some(answers),
     };
-    let mut c:Capabilities=serde_json::from_value(serde_json::json!({"supported_contract_versions":[1],"model":"exact","profile":"p","max_request_bytes":1024,"max_response_bytes":1024,"capabilities":[{"capability":"text_embedding","semantic_task":"text_embedding","input_formats":["text"],"output_formats":["embeddings_float32"],"availability":{"state":"available"},"option_bounds":[]}]})).unwrap();
-    validate_capabilities(&c, &s).unwrap();
-    c.profile = "other".into();
-    assert!(validate_capabilities(&c, &s)
-        .unwrap_err()
-        .to_string()
-        .contains("identity mismatch"));
-    c.profile = "p".into();
-    c.capabilities.push(c.capabilities[0].clone());
-    assert!(validate_capabilities(&c, &s)
-        .unwrap_err()
-        .to_string()
-        .contains("duplicate capability"));
+    let p = decision.relationship_probabilities().unwrap();
+    assert_eq!(p[&Relationship::Contradicts], 0.7);
+    for bad in [
+        serde_json::json!({"type":"choice","choice":"maybe","confidence":0.5,"probabilities":{}}),
+        serde_json::json!({"type":"score","score":1.0,"confidence":0.5,"probabilities":{}}),
+        serde_json::json!({"type":"choice","choice":"supports","confidence":1.5,"probabilities":{}}),
+        serde_json::json!({"type":"choice","choice":"supports","confidence":0.5,"probabilities":{"supports":2.0}}),
+    ] {
+        let mut r = result.clone();
+        r["answers"]["relationship"] = bad;
+        assert!(native_decision(&r)
+            .unwrap_err()
+            .to_string()
+            .starts_with("unknown:"));
+    }
+    let mut r = result.clone();
+    r["answers"].as_object_mut().unwrap().remove("update_type");
+    assert!(native_decision(&r).is_err());
+}
+#[test]
+fn config_pins_are_validated_on_the_request_side() {
+    let config = |embedding: serde_json::Value,
+                  decision: serde_json::Value,
+                  adapter: serde_json::Value| {
+        serde_json::from_value::<Config>(serde_json::json!({"endpoint":"http://127.0.0.1:8080","extraction":null,"embedding":embedding,"decision":decision,"decision_adapter":adapter})).map_err(anyhow::Error::from).and_then(Pumas::new)
+    };
+    let gemma = serde_json::json!({"model":"embeddinggemma-2","query_prefix":"task: search result | query: ","document_prefix":"title: none | text: "});
+    config(
+        gemma.clone(),
+        serde_json::json!({"model":"kev"}),
+        serde_json::json!("decision_native_v1"),
+    )
+    .unwrap();
+    // Legacy configs with explicit profile and capability still parse as pins.
+    config(
+        serde_json::json!({"model":"e","profile":"p","capability":"text_embedding"}),
+        serde_json::Value::Null,
+        serde_json::Value::Null,
+    )
+    .unwrap();
+    for (embedding, decision, adapter) in [
+        (
+            gemma.clone(),
+            serde_json::json!({"model":"kev","capability":"decision"}),
+            serde_json::json!("decision_json_v1"),
+        ),
+        (
+            gemma.clone(),
+            serde_json::json!({"model":"chat","capability":"chat_generation"}),
+            serde_json::json!("decision_native_v1"),
+        ),
+        (
+            gemma.clone(),
+            serde_json::json!({"model":"kev"}),
+            serde_json::json!("guessed_adapter"),
+        ),
+        (
+            serde_json::json!({"model":"e","capability":"chat_generation"}),
+            serde_json::Value::Null,
+            serde_json::Value::Null,
+        ),
+        (
+            serde_json::json!({"model":"e","query_prefix":"bad\u{7}"}),
+            serde_json::Value::Null,
+            serde_json::Value::Null,
+        ),
+        (
+            serde_json::json!({"model":"e","prefix":"typo"}),
+            serde_json::Value::Null,
+            serde_json::Value::Null,
+        ),
+        (
+            gemma.clone(),
+            serde_json::json!({"model":"kev","query_prefix":"q: "}),
+            serde_json::json!("decision_native_v1"),
+        ),
+    ] {
+        assert!(
+            config(embedding.clone(), decision.clone(), adapter.clone()).is_err(),
+            "{embedding} {decision} {adapter}"
+        );
+    }
 }
 #[test]
 fn latest_filters_after_snapshot_and_does_not_merge_distinct_objects() {

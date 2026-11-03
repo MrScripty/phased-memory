@@ -11,13 +11,15 @@ The consumer was implemented against Pumas Library revision [`ad31e391dcd94c204b
 - [HTTP discovery and endpoint rules](https://github.com/MrScripty/Pumas-Library/blob/ad31e391dcd94c204b3fcd748cc98d27b3281e65/rust/crates/pumas-core/src/discovery/http.rs).
 - [HTTP generation admission](https://github.com/MrScripty/Pumas-Library/blob/ad31e391dcd94c204b3fcd748cc98d27b3281e65/rust/crates/pumas-rpc/src/discovery.rs).
 
-[Pumas Playground](https://github.com/MrScripty/Pumas-Playground) provides a related public consumer example. No code from it is bundled here. Public source contracts establish route, DTO and fence meaning; they do not establish availability of an installed runtime or quality of a selected model. Model names and plugin manifests cannot qualify behavior. `decision_json_v1` and `original_json_v1` are consumer prompting protocols requiring explicit runtime-operator qualification, not new native Pumas capabilities.
+[Pumas Playground](https://github.com/MrScripty/Pumas-Playground) provides a related public consumer example. No code from it is bundled here. Public source contracts establish route, DTO and fence meaning; they do not establish availability of an installed runtime or quality of a selected model. Model names and plugin manifests cannot qualify behavior. `decision_json_v1` and `original_json_v1` are consumer prompting protocols requiring explicit runtime-operator qualification, not new native Pumas capabilities. `decision_native_v1` maps relationship decisions onto Pumas' native `decision` capability and equally requires explicit qualification.
+
+The v0.8 consumer update (served-model discovery, tolerant response parsing, typed `not_admitted`/`unknown` errors with messages, `decision` capability) follows the Pumas `docs/contracts/model-operations-v1.md` sections "Compatibility rules", "Request grammar", "Errors" and "Typed HTTP slice", and the DTOs in `rust/crates/pumas-rpc/src/handlers/model_operations/types.rs`, as of Pumas branch `feat/v080-consumer-api` revision `832767aa` (not yet published when this consumer was updated; replace with a public permalink once available).
 
 ## Responsibility boundaries
 
 - `domain.rs` owns typed claim and relationship semantics, provenance and vector validity.
 - `store.rs` owns transactional append-only SQLite history, schema admission and exact cosine retrieval.
-- `pumas.rs` owns public HTTP transport, capability inspection and exact model/profile/generation fences.
+- `pumas.rs` owns public HTTP transport, served-model discovery, capability selection by name, decision adapters, embedding text prefixes and exact model/profile/generation fences.
 - `eval.rs` owns the authored regression schema and Rust scoring rules.
 - `original.rs` owns lossless original JSONL projections and compatibility with its preserved Python scorer.
 - `phase.rs` owns the optional feature projection, frozen vocabulary/scale and expected-equivalence control. The learned arm uses the unchanged Pumas transport.

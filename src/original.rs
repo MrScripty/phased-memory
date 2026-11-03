@@ -1,7 +1,7 @@
 //! Byte-preserved starter-pack interfaces. Gold is owned by its untouched Python scorer.
 use crate::{
     domain::*,
-    pumas::{Observed, Pumas},
+    pumas::{Observed, Pumas, TextRole},
     store::{Filters, Hit, Store},
 };
 use anyhow::{ensure, Context, Result};
@@ -483,7 +483,7 @@ pub async fn index_memories(
                 extraction.validate(&memory.text)?;
                 (extraction.claims[extraction.primary_claim_index].claim.clone(),record.extraction.as_ref().unwrap().provenance.clone())
             }else{(memory.normalized_claim.clone(),Provenance::Human{note:"original pack human reference metadata; oracle-scope diagnostic, not model extraction".into()})};
-            let embedding=pumas.embed(&memory.text).await?;record.embedding_provenance=Some(embedding.provenance.clone());
+            let embedding=pumas.embed(&memory.text, TextRole::Document).await?;record.embedding_provenance=Some(embedding.provenance.clone());
             let mut claim=normalized.application_claim(&memory.id,&memory.text)?;
             claim.qualifiers.push(if extract{"original_metadata:pumas_extraction"}else{"original_metadata:human_reference"}.into());
             let batch=Ingest{raw_text:memory.text.clone(),claims:vec![claim],provenance,embeddings:vec![ClaimEmbedding{claim_id:memory.id.clone(),embedding}]};
@@ -748,7 +748,7 @@ pub async fn run_retrieval(
                 index_complete,
                 "unavailable: original index must contain all ten expected memory IDs"
             );
-            let embedding = pumas.embed(&query.query).await?;
+            let embedding = pumas.embed(&query.query, TextRole::Query).await?;
             trace.query_embedding_provenance = Some(embedding.provenance.clone());
             let comparison = store.compare_all(&embedding, &Filters::default())?;
             ensure!(

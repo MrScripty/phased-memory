@@ -1,0 +1,11 @@
+{
+  "endpoint": "http://127.0.0.1:8080",
+  "extraction": {"model": "SERVED_CHAT_ALIAS"},
+  "embedding": {
+    "model": "embeddinggemma-2",
+    "query_prefix": "task: search result | query: ",
+    "document_prefix": "title: none | text: "
+  },
+  "decision": {"model": "kev-4b"},
+  "decision_adapter": null
+}

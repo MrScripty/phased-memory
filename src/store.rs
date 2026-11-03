@@ -10,6 +10,12 @@ pub struct Store {
 #[derive(Debug, Clone, Serialize)]
 pub struct DecisionEvidence {
     pub labels: Labels,
+    /// Operator-qualified adapter that produced the labels.
+    pub adapter: String,
+    /// Native relationship-answer confidence. Not calibrated; never a probability claim.
+    pub confidence: Option<f64>,
+    /// Native per-question answers retained as evidence.
+    pub native_answers: Option<std::collections::BTreeMap<String, crate::pumas::NativeAnswer>>,
     pub provenance: Provenance,
 }
 #[derive(Debug, Clone, Serialize)]
